@@ -20,9 +20,17 @@ public class All_client implements Runnable {
 	 BufferedWriter out;
 	 DataInputStream dis;
 	 DataOutputStream dos;
-	Scanner sc = new Scanner(System.in); 
-	 
-		public String getClient_name() {
+	 boolean username=true;
+
+		public boolean isUsername() {
+        return username;
+    }
+
+    public void setUsername(boolean username) {
+        this.username = username;
+    }
+
+        public String getClient_name() {
 			return client_name;
 		}
 
@@ -60,13 +68,12 @@ public class All_client implements Runnable {
 		 }
 	}
 
-	
 	public void get_all_message(String message) {
 		for(All_client client : liste_client) {
 			try {
-				client.out.write(message);
-				client.out.newLine();
-				client.out.flush();
+					client.out.write(message);
+					client.out.newLine();
+					client.out.flush();
 			} catch (IOException e) {
 				
 				e.printStackTrace();

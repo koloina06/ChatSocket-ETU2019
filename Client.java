@@ -17,13 +17,16 @@ import java.net.UnknownHostException;
 import java.security.PublicKey;
 import java.util.Scanner;
 
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 public class Client {
 
 	Socket clientSocket;
 	 BufferedReader in;
-	   BufferedWriter out;
+	BufferedWriter out;
 	 String username;
 	 boolean anarana= true;
 	 DataInputStream dis;
@@ -50,7 +53,7 @@ public class Client {
 			
 		}
 	}
-	
+
 	public void send_message(String message) {
 		try {
 			if(this.isAnarana()==true){
@@ -60,7 +63,7 @@ public class Client {
 				this.setAnarana(false);
 			}
 			 while(clientSocket.isConnected()) {
-				 	out.write(username+ ": "+ message);
+				 	out.write(username+ ":  "+ "  "+ message);
 				 	out.newLine();
 				 	out.flush();
 					break;
@@ -76,8 +79,8 @@ public class Client {
 				String all_message=null;
 				while(clientSocket.isConnected()) {
 					try {
-						all_message= in.readLine();
-						textArea.append(all_message+ "\n");
+							all_message= in.readLine();
+							textArea.append(all_message+ "\n");
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -86,40 +89,24 @@ public class Client {
 		}).start();
 	}
 
-	public void sendFile(File file, Socket socket) throws Exception{
-		dos= new DataOutputStream(socket.getOutputStream());
-		fis= new FileInputStream(file.getAbsolutePath());
-		String nom_fichier= file.getName();
-		dos.writeLong(file.length());
-		byte[] buffer= nom_fichier.getBytes();
-		byte[] content= new byte[(int) file.length()];
-		fis.read(content);
-			dos.writeInt(buffer.length);
-			dos.write(buffer);
-			dos.writeInt(content.length);
-			dos.write(content);
-		fis.close();
-		dis.close();
+	public void private_chat(JTextArea textArea,String username,String user) {
+		new Thread(new Runnable() {
+			public void run() {
+				String all_message=null;
+				while(clientSocket.isConnected()) {
+					try {
+							if(username.equalsIgnoreCase(user)){
+								all_message= in.readLine();
+								textArea.append(all_message+ "\n");
+							}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}).start();
 	}
 
-	public void receiveFile(File file,JTextArea textArea) throws Exception{
-		int taille= dis.readInt();
-		if(taille>0){
-			byte[] fileNameBytes = new byte[taille];
-					dis.readFully(fileNameBytes,0,taille);
-					
-					String filename = new String(fileNameBytes);
-					
-					int taille_contenue = dis.readInt();
-					
-					if (taille_contenue>0) {
-						byte[] fileContentBytes = new byte[taille_contenue]; 
-						dis.readFully(fileContentBytes,0,taille_contenue);
-		
-					}
-				textArea.append(file.getName());
-		}
-	}
 	
 	public Socket getClientSocket() {
 		return clientSocket;

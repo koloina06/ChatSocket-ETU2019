@@ -1,8 +1,12 @@
 package serveur;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import javax.swing.JTextArea;
+
 import client.*;
 
 
@@ -23,12 +27,13 @@ public class Server {
 		this.serveurSocket = serveurSocket;
 	}
 
-	public void start_server() {
+	public void start_server(JTextArea textArea) {
 		 try {
 			 while(!serveurSocket.isClosed()) {
 				 clientSocket = serveurSocket.accept();
 				 All_client clients= new All_client(clientSocket);
-				System.out.println(clients.getClient_name()+ " est connecte");
+				 System.out.println(clients.getClient_name()+ " est connecte");
+				 textArea.append(clients.getClient_name()+ " est connecte \n");
 				 Thread thread= new Thread(clients);
 				thread.start();
 			 }
@@ -37,6 +42,7 @@ public class Server {
 		}
 	
 	}
+
 	
 	public void close_server() {
 			try {
@@ -48,9 +54,5 @@ public class Server {
 			}
 	}
 	
-	public static void main(String[] args) throws Exception {
-		ServerSocket serverSocket= new ServerSocket(5000);
-		Server server= new Server(serverSocket);
-		server.start_server();
-	}
+	
 }
