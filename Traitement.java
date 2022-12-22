@@ -2,7 +2,7 @@ package affichage;
 
 import java.net.Socket;
 import java.util.Vector;
-
+import java.awt.*;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -144,7 +144,7 @@ public class Traitement {
 	
 	public JFrame show_chat(String username) {
 		JFrame jFrame= new JFrame();
-		jFrame.setSize(500,600);
+		jFrame.setSize(500,500);
 		jFrame.setVisible(true);
 		panel= new JPanel();
 		panel.setLayout(null);
@@ -155,8 +155,12 @@ public class Traitement {
 		textField.setName("Votre message");
 		JButton boutton= new JButton("Send");
 		 boutton.setBounds(300, 20, 100, 20);
+		 Font font = new Font(Font.DIALOG,  Font.BOLD, 15);
 		 textArea= new JTextArea();
 		 textArea.setBounds(20, 100, 300, 300);
+		 textArea.setBackground(Color.BLACK);
+		 textArea.setFont(font);
+		 textArea.setForeground(Color.white);
 		 boutton.addMouseListener(new Listener(boutton,textField,this,textArea));
 		 panel.add(label);
 		 panel.add(textField);
